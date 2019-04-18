@@ -793,10 +793,12 @@ rops_adoption_bind_h1(struct lws *wsi, int type, const char *vh_prot_name)
 
 
 	if (type & _LWS_ADOPT_FINISH) {
-		if (!lws_header_table_attach(wsi, 0))
+		if (!lws_header_table_attach(wsi, 0)) {
 			lwsl_debug("Attached ah immediately\n");
-		else
+		}
+		else {
 			lwsl_info("%s: waiting for ah\n", __func__);
+		}
 
 		return 1;
 	}

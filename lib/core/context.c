@@ -834,10 +834,12 @@ lws_create_context(const struct lws_context_creation_info *info)
 	lwsl_info("Libwebsockets version: %s\n", library_version);
 
 #ifdef LWS_WITH_IPV6
-	if (!lws_check_opt(info->options, LWS_SERVER_OPTION_DISABLE_IPV6))
+	if (!lws_check_opt(info->options, LWS_SERVER_OPTION_DISABLE_IPV6)) {
 		lwsl_info("IPV6 compiled in and enabled\n");
-	else
+	}
+	else {
 		lwsl_info("IPV6 compiled in but disabled\n");
+	}
 #else
 	lwsl_info("IPV6 not compiled in\n");
 #endif

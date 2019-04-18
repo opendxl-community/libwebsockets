@@ -46,10 +46,12 @@ OpenSSL_verify_callback(int preverify_ok, X509_STORE_CTX *x509_ctx)
 
 	n = lws_tls_openssl_cert_info(topcert, LWS_TLS_CERT_INFO_COMMON_NAME,
 				      &ir, sizeof(ir.ns.name));
-	if (!n)
+	if (!n) {
 		lwsl_info("%s: client cert CN '%s'\n", __func__, ir.ns.name);
-	else
+	}
+	else {
 		lwsl_info("%s: couldn't get client cert CN\n", __func__);
+	}
 
 	n = wsi->vhost->protocols[0].callback(wsi,
 			LWS_CALLBACK_OPENSSL_PERFORM_CLIENT_CERT_VERIFICATION,
@@ -376,6 +378,8 @@ lws_tls_server_vhost_backend_init(const struct lws_context_creation_info *info,
 #endif
 	SSL_CTX_set_options(vhost->tls.ssl_ctx, SSL_OP_SINGLE_DH_USE);
 	SSL_CTX_set_options(vhost->tls.ssl_ctx, SSL_OP_CIPHER_SERVER_PREFERENCE);
+	
+	SSL_CTX_set_session_cache_mode(vhost->tls.ssl_ctx, SSL_SESS_CACHE_OFF);	
 
 	if (info->ssl_cipher_list)
 		SSL_CTX_set_cipher_list(vhost->tls.ssl_ctx, info->ssl_cipher_list);
@@ -451,7 +455,6 @@ lws_tls_server_new_nonblocking(struct lws *wsi, lws_sockfd_type accept_fd)
 
 	SSL_set_mode(wsi->tls.ssl, SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER | 
 							   SSL_MODE_RELEASE_BUFFERS);
-	SSL_CTX_set_session_cache_mode(vhost->tls.ssl_ctx, SSL_SESS_CACHE_OFF);
 
 	bio = SSL_get_rbio(wsi->tls.ssl);
 	if (bio)
@@ -491,11 +494,13 @@ lws_tls_server_accept(struct lws *wsi)
 	if (n == 1) {
 		n = lws_tls_peer_cert_info(wsi, LWS_TLS_CERT_INFO_COMMON_NAME, &ir,
 					   sizeof(ir.ns.name));
-		if (!n)
+		if (!n) {
 			lwsl_notice("%s: client cert CN '%s'\n", __func__,
 				    ir.ns.name);
-		else
+		}
+		else {
 			lwsl_info("%s: no client cert CN\n", __func__);
+		}
 
 		lws_openssl_describe_cipher(wsi);
 

@@ -2747,9 +2747,10 @@ lws_socket_bind(struct lws_vhost *vhost, lws_sockfd_type sockfd, int port,
 #endif
 
 #ifndef LWS_PLAT_OPTEE
-	if (getsockname(sockfd, (struct sockaddr *)&sin, &len) == -1)
+	if (getsockname(sockfd, (struct sockaddr *)&sin, &len) == -1) {
 		lwsl_warn("getsockname: %s\n", strerror(LWS_ERRNO));
-	else
+	}
+	else {
 #endif
 #if defined(LWS_WITH_IPV6)
 		port = (sin.ss_family == AF_INET6) ?
@@ -2761,6 +2762,9 @@ lws_socket_bind(struct lws_vhost *vhost, lws_sockfd_type sockfd, int port,
 			memcpy(&sain, &sin, sizeof(sain));
 			port = ntohs(sain.sin_port);
 		}
+#endif
+#ifndef LWS_PLAT_OPTEE
+	}
 #endif
 
 	return port;

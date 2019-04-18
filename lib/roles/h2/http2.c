@@ -849,10 +849,11 @@ lws_h2_parse_frame_header(struct lws *wsi)
 		return 1;
 	}
 
-	if (h2n->swsi)
+	if (h2n->swsi) {
 		lwsl_info("%s: wsi %p, State: %s, received cmd %d\n",
 		  __func__, h2n->swsi,
 		  h2_state_names[h2n->swsi->h2.h2_state], h2n->type);
+	}
 	else {
 		/* if it's data, either way no swsi means CLOSED state */
 		if (h2n->type == LWS_H2_FRAME_TYPE_DATA) {

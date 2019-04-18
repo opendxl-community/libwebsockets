@@ -132,10 +132,12 @@ lws_context_init_server_ssl(const struct lws_context_creation_info *info,
 			lwsl_notice(" SSL ciphers: '%s'\n",
 						info->ssl_cipher_list);
 
-		if (vhost->tls.use_ssl)
+		if (vhost->tls.use_ssl) {
 			lwsl_notice(" Using SSL mode\n");
-		else
+		}
+		else {
 			lwsl_notice(" Using non-SSL mode\n");
+		}
 	}
 
 	/*

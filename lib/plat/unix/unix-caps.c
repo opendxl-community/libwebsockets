@@ -61,11 +61,13 @@ lws_plat_drop_app_privileges(const struct lws_context_creation_info *info)
 #endif
 
 			initgroups(p->pw_name, info->gid);
-			if (setuid(info->uid))
+			if (setuid(info->uid)) {
 				lwsl_warn("setuid: %s\n", strerror(LWS_ERRNO));
-			else
+			}
+			else {
 				lwsl_notice("Set privs to user '%s'\n",
 					    p->pw_name);
+			}
 
 #if defined(LWS_HAVE_SYS_CAPABILITY_H) && defined(LWS_HAVE_LIBCAP)
 			_lws_plat_apply_caps(CAP_EFFECTIVE, info->caps,

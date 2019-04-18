@@ -55,14 +55,16 @@ OpenSSL_client_verify_callback(int preverify_ok, X509_STORE_CTX *x509_ctx)
 			} else if ((err == X509_V_ERR_CERT_NOT_YET_VALID ||
 				    err == X509_V_ERR_CERT_HAS_EXPIRED) &&
 				    wsi->tls.use_ssl & LCCSCF_ALLOW_EXPIRED) {
-				if (err == X509_V_ERR_CERT_NOT_YET_VALID)
+				if (err == X509_V_ERR_CERT_NOT_YET_VALID) {
 					lwsl_notice("accepting not yet valid "
 						    "certificate (verify_"
 						    "callback)\n");
-				else if (err == X509_V_ERR_CERT_HAS_EXPIRED)
+				}
+				else if (err == X509_V_ERR_CERT_HAS_EXPIRED) {
 					lwsl_notice("accepting expired "
 						    "certificate (verify_"
 						    "callback)\n");
+				}
 				X509_STORE_CTX_set_error(x509_ctx, X509_V_OK);
 				return 1;	// ok
 			}

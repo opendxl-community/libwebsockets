@@ -372,11 +372,13 @@ bad_conn_format:
 		}
 
 		if (!wsi->vhost->protocols[n].callback) {
-			if (wsi->protocol)
+			if (wsi->protocol) {
 				lwsl_err("Failed to match protocol %s\n",
 						wsi->protocol->name);
-			else
+			}
+			else {
 				lwsl_err("No protocol on client\n");
+			}
 			goto bail2;
 		}
 	}
