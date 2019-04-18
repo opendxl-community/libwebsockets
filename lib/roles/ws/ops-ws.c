@@ -782,6 +782,11 @@ lws_server_init_wsi_for_ws(struct lws *wsi)
 	if (!n)
 		n = wsi->context->pt_serv_buf_size;
 	n += LWS_PRE;
+
+#if defined(LWS_WITHOUT_EXTENSIONS)
+	n = LWS_PRE + 8; // Only extensions seem to use this buffer. So, allocating a minimal size.
+#endif
+
 	wsi->ws->rx_ubuf = lws_malloc(n + 4 /* 0x0000ffff zlib */, "rx_ubuf");
 	if (!wsi->ws->rx_ubuf) {
 		lwsl_err("Out of Mem allocating rx buffer %d\n", n);
