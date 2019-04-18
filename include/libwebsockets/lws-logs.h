@@ -66,40 +66,25 @@ lwsl_timestamp(int level, char *p, int len);
 
 /* these guys are unconditionally included */
 
-#define lwsl_err(...) _lws_log(LLL_ERR, __VA_ARGS__)
-#define lwsl_user(...) _lws_log(LLL_USER, __VA_ARGS__)
+#define lwsl_err(...) if ((log_level & LLL_ERR)) _lws_log(LLL_ERR, __VA_ARGS__)
+#define lwsl_user(...) if ((log_level & LLL_USER)) _lws_log(LLL_USER, __VA_ARGS__)
 
 #if !defined(LWS_WITH_NO_LOGS)
-/* notice and warn are usually included by being compiled in */
-#define lwsl_warn(...) _lws_log(LLL_WARN, __VA_ARGS__)
-#define lwsl_notice(...) _lws_log(LLL_NOTICE, __VA_ARGS__)
-#endif
-/*
- *  weaker logging can be deselected by telling CMake to build in RELEASE mode
- *  that gets rid of the overhead of checking while keeping _warn and _err
- *  active
- */
-
-#ifdef _DEBUG
-#if defined(LWS_WITH_NO_LOGS)
 /* notice, warn and log are always compiled in */
-#define lwsl_warn(...) _lws_log(LLL_WARN, __VA_ARGS__)
-#define lwsl_notice(...) _lws_log(LLL_NOTICE, __VA_ARGS__)
-#endif
-#define lwsl_info(...) _lws_log(LLL_INFO, __VA_ARGS__)
-#define lwsl_debug(...) _lws_log(LLL_DEBUG, __VA_ARGS__)
-#define lwsl_parser(...) _lws_log(LLL_PARSER, __VA_ARGS__)
-#define lwsl_header(...)  _lws_log(LLL_HEADER, __VA_ARGS__)
-#define lwsl_ext(...)  _lws_log(LLL_EXT, __VA_ARGS__)
-#define lwsl_client(...) _lws_log(LLL_CLIENT, __VA_ARGS__)
-#define lwsl_latency(...) _lws_log(LLL_LATENCY, __VA_ARGS__)
-#define lwsl_thread(...) _lws_log(LLL_THREAD, __VA_ARGS__)
+#define lwsl_warn(...) if ((log_level & LLL_WARN)) _lws_log(LLL_WARN, __VA_ARGS__)
+#define lwsl_notice(...) if ((log_level & LLL_NOTICE)) _lws_log(LLL_NOTICE, __VA_ARGS__)
+#define lwsl_info(...) if ((log_level & LLL_INFO)) _lws_log(LLL_INFO, __VA_ARGS__)
+#define lwsl_debug(...) if ((log_level & LLL_DEBUG)) _lws_log(LLL_DEBUG, __VA_ARGS__)
+#define lwsl_parser(...) if ((log_level & LLL_PARSER)) _lws_log(LLL_PARSER, __VA_ARGS__)
+#define lwsl_header(...)  if ((log_level & LLL_HEADER)) _lws_log(LLL_HEADER, __VA_ARGS__)
+#define lwsl_ext(...)  if ((log_level & LLL_EXT)) _lws_log(LLL_EXT, __VA_ARGS__)
+#define lwsl_client(...) if ((log_level & LLL_CLIENT)) _lws_log(LLL_CLIENT, __VA_ARGS__)
+#define lwsl_latency(...) if ((log_level & LLL_LATENCY)) _lws_log(LLL_LATENCY, __VA_ARGS__)
+#define lwsl_thread(...) if ((log_level & LLL_THREAD)) _lws_log(LLL_THREAD, __VA_ARGS__)
 
-#else /* no debug */
-#if defined(LWS_WITH_NO_LOGS)
+#else /* no logs */
 #define lwsl_warn(...) do {} while(0)
 #define lwsl_notice(...) do {} while(0)
-#endif
 #define lwsl_info(...) do {} while(0)
 #define lwsl_debug(...) do {} while(0)
 #define lwsl_parser(...) do {} while(0)
