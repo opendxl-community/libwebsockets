@@ -1862,9 +1862,10 @@ do_more_inside_frame:
 			 */
 
 			n = lws_issue_raw_ext_access(wsi, buf - pre, len + pre);
-			wsi->ws->inside_frame = 1;
 			if (n <= 0)
 				return n;
+
+			wsi->ws->inside_frame = 1;
 
 			if (n == (int)len + pre) {
 				/* everything in the buffer was handled
