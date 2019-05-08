@@ -130,7 +130,7 @@ rops_handle_POLLIN_listen(struct lws_context_per_thread *pt, struct lws *wsi,
 		cwsi = lws_adopt_descriptor_vhost(wsi->vhost, opts, fd,
 						  NULL, NULL);
 		if (!cwsi) {
-			lwsl_err("%s: lws_adopt_descriptor_vhost failed\n",
+			lwsl_info("%s: lws_adopt_descriptor_vhost failed\n",
 					__func__);
 			/* already closed cleanly as necessary */
 			return LWS_HPI_RET_WSI_ALREADY_DIED;
