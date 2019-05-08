@@ -1870,12 +1870,9 @@ do_more_inside_frame:
 			if (n <= 0)
 				return n;
 
-			wsi->ws->inside_frame = 1;
-
 			if (n == (int)len + pre) {
 				/* everything in the buffer was handled
 				 * (or rebuffered...) */
-				wsi->ws->inside_frame = 0;
 				return (int)orig_len;
 			}
 
